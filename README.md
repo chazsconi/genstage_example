@@ -1,19 +1,16 @@
 # GenstageExample
 
-**TODO: Add description**
+## Issues
 
-## Installation
+* If using BroadcastDispatcher then events send to all consumers of a particular type
+* Can be solved using a ConsumerSupervisor, but this cannot produce events normally
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `genstage_example` to your list of dependencies in `mix.exs`:
+* Can produce only events?
 
-```elixir
-def deps do
-  [{:genstage_example, "~> 0.1.0"}]
-end
-```
+* Send external events from producer
+  * Use `GenStage.call(GenStageExample.JobProducer,{:notify, {:summary, 1}})` or similar
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/genstage_example](https://hexdocs.pm/genstage_example).
-
+* Tell consumers to stop working
+  * Use `GenStage.sync_notify(GenStageExample.JobProducer, :back_off)` or similar
+  * Handle this in a `handl_info()` callback
+  * Can send a similar message to tell them to start again
