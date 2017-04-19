@@ -100,6 +100,18 @@ defmodule GenStageExample do
     end
   end
 
+  defmodule TestGenServer do
+    use GenServer
+
+    def start_link(scraper_worker_count) do
+      GenServer.start_link(__MODULE__, scraper_worker_count, name: __MODULE__)
+    end
+
+    def handle_call(:my_call, _from, state) do
+      {:reply, :ok, state}
+    end
+  end
+
   use Application
 
   @scraper_count 1
@@ -118,7 +130,7 @@ defmodule GenStageExample do
       #   worker(GenStageExample.JobProducer, [])
       # ] ++
       for i <- 1..@scraper_count do
-        worker(GenStageExample.ScraperWorkerConsumer, [i], id: i)
+        worker(GenStageExample.TestGenServer, [i])
       end
       # ++ [
       #   worker(GenStageExample.DBUpdaterConsumer, [@scraper_count])
