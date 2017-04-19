@@ -14,3 +14,10 @@
   * Use `GenStage.sync_notify(GenStageExample.JobProducer, :back_off)` or similar
   * Handle this in a `handl_info()` callback
   * Can send a similar message to tell them to start again
+
+
+## To crash
+
+run
+`GenStage.call(GenStageExample.ScraperWorkerConsumer1,:my_callx)`
+a few times

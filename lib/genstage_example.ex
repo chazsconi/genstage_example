@@ -37,9 +37,13 @@ defmodule GenStageExample do
       Logger.info "ScraperWorkerConsumer init() pid: #{inspect self()}"
       {:producer_consumer,
         :does_not_have_state,
-        subscribe_to:
-          [{GenStageExample.JobProducer, max_demand: 1}]
+        # subscribe_to:
+        #   [{GenStageExample.JobProducer, max_demand: 1}]
       }
+    end
+
+    def handle_call(:my_call, _from, state) do
+      {:reply, :ok, [], state}
     end
 
     def handle_subscribe(type, _opts, from, state) do
@@ -109,15 +113,16 @@ defmodule GenStageExample do
 
     _ = Logger.info "Starting application"
 
-    children = [
-      worker(GenStageExample.JobProducer, [])
-    ] ++
-    for i <- 1..@scraper_count do
-      worker(GenStageExample.ScraperWorkerConsumer, [i], id: i)
-    end
-    ++ [
-      worker(GenStageExample.DBUpdaterConsumer, [@scraper_count])
-    ]
+    children =
+      # [
+      #   worker(GenStageExample.JobProducer, [])
+      # ] ++
+      for i <- 1..@scraper_count do
+        worker(GenStageExample.ScraperWorkerConsumer, [i], id: i)
+      end
+      # ++ [
+      #   worker(GenStageExample.DBUpdaterConsumer, [@scraper_count])
+      # ]
 
     opts = [strategy: :one_for_one, name: GenStageExample.Supervisor]
     Supervisor.start_link(children, opts)
