@@ -3,7 +3,7 @@ defmodule GenstageExampleTest do
 
   @tag timeout: 600_000
   test "bad_call2" do
-    delay = 500 # 1800 crashes after 6, 1500 after 4
+    delay = 2000 # 1800 crashes after 6, 1500 after 4
 
     for n <- 1..100 do
       IO.puts "Attempt #{n}"
